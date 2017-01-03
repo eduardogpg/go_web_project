@@ -1,26 +1,20 @@
 package models
 
-import(
-	"errors"
-	"golang.org/x/crypto/bcrypt" //go get golang.org/x/crypto/bcrypt
-)
+//go get golang.org/x/crypto/bcrypt
+import (
+	"golang.org/x/crypto/bcrypt" 
+	//"fmt"
+	)
 
 type User struct{
+	Id int
 	Username string 
 	Email string
 	EncryptedPassword string
 }
 
-type ValidateError error
-
-var(
-	errorUsername = ValidateError(errors.New("You Must supply a username"))
-	errorEmail = ValidateError(errors.New("You must supply a email"))
-	errorPassword = ValidateError(errors.New("You must supply a password"))
-)
-
 func (this *User) SetPassword(text string){
-    hashedPassword, err := bcrypt.GenerateFromPassword(toByte(text), bcrypt.DefaultCost)
+    hashedPassword, err := bcrypt.GenerateFromPassword([]byte(text), bcrypt.DefaultCost)
     if err != nil {
         panic(err)
     }
@@ -28,31 +22,47 @@ func (this *User) SetPassword(text string){
 }
 
 func (this *User) CheckPassword(text string) bool {
-	err := bcrypt.CompareHashAndPassword(toByte(this.EncryptedPassword), toByte(text))
+	err := bcrypt.CompareHashAndPassword([]byte(this.EncryptedPassword), []byte(text))
 	return err != nil
 }
 
-func toByte(text string)[]byte{
-	return []byte(text)
+func (this *User) Save() bool{
+	connection.Create(&this)
+  	return true
 }
 
-func NewUser(username, email, password string) (User, ValidateError){
-	user := User{ 	Username:username,
-					Email:email, 
-				}
+func Find(id int) User{
+	user := User{}
+  	connection.Where("id = ?", id).First(&user)
+  	return user
+}
 
-	if username == ""{
-		return user, errorUsername
-	}
+func FindBy(field, value string) User{
+	user := User{}
+  	connection.Where(field +" = ?", value).First(&user)
+  	return user
+}
 
-	if email == ""{
-		return user, errorEmail
-	}
+func(this *User) Delete(){
+  connection.Delete(&this)
+}
 
-	if password == ""{
-		return user, errorPassword
-	}
-
+func NewUser(username, password, email string) (User, ValidateError){
+	user := User{ Username:username, Email:email, }
+ 	err := UserValidate(username, password, email)
+ 	if err != nil{
+ 		return user, err
+ 	}
+ 	
 	user.SetPassword(password)
 	return user, nil
+}
+
+
+func CreateUser(username, password, email string) (User, ValidateError){
+	user, err := NewUser(username, password, email)
+	if err != nil{
+		user.Save()
+	}
+	return user, err
 }
