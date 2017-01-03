@@ -50,7 +50,7 @@ func TestEncryptedPassword(t *testing.T) {
 }
 
 func TestCheckPassword(t *testing.T) {
-	//Tenemos que realizar un refactor!
+	//Tenemos que realizar un refactor! D: que pasa
 	user, _ := models.NewUser(username, password, email)
 	if user.CheckPassword(password) {
 		t.Error("Fail checkPassword", nil)
