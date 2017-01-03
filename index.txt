@@ -1,0 +1,60 @@
+Introducción
+	1.-Introducción
+	2.-Hola Mundo Web (Primer servidor.)
+	3.-Explicación de Hola Mundo web
+		-Indicamos los recurso de golang
+	4.-HTTP protocol
+	5.-CURL
+	6.-Agregamos el encabezado a los headers, lo visualizamos dentro de la terminal o el navegador.
+
+Libreria HTTP
+	7.-Métodos GET, POST, PUT, DELETE 
+	8.-HandelFunc
+	9.-Handle
+	10.-ListenAndServe
+	11.-Redirect
+	12.-Server Mux (NewServeMux)
+	13.-Gorila MUx
+	14.-HTTP error
+	15.-Tipo de errores HTTP
+		Aqui estan todos los errores -> https://golang.org/pkg/net/http/
+	15.-Cookies
+	16.-URL, 	
+		Diferencias entre la URL y la URI
+	17.-URL con parametros
+		¿Cómo funcionan los parametros dentro de la URL? ?valor=valor&
+
+Templates
+	16.-Renderizando de HTML Terminal, Navegador
+	17.-Render template browser
+	18.-Pasamos como parametro alguna structura
+	19.-Condicionales y Ciclos dentro del template
+	20.-Funciones dentro del template
+		FuncMap and funcs
+	21.-Asstes
+
+	ExecuteTemplate? En que apartado debe de ir esto?
+
+JSON
+	22.-Marshall
+	22.-UnMarshall
+	24.-Consumir una API de terceros
+
+
+Proyecto
+	Introducción al Proyecto
+	Métodos de encriptación
+	Formularios
+		Leer lo que nos mande el formualrio.
+	Encriptación en nuestra aplicación
+	Base de datos
+	ORM golang
+
+Durante el proyecto debemos de checar la siguiente documentación:
+https://larry-price.com/blog/2015/06/25/architecture-for-a-golang-web-app
+
+
+
+Librerias que podemos implementar
+https://github.com/tylerb/graceful
+

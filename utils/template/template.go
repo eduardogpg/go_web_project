@@ -13,10 +13,7 @@ var layoutFuncs = template.FuncMap{
 	},
 }
 
-var layout = template.Must(
-	template.New("layout.html").Funcs(layoutFuncs).ParseFiles("templates/layout.html"),
-)
-
+var layout = template.Must( template.New("layout.html").Funcs(layoutFuncs).ParseFiles("templates/layout.html"), )
 var templates = template.Must(template.New("t").ParseGlob("./templates/**/*.html"))
 
 func RenderTemplate(w http.ResponseWriter, r *http.Request, name string, data interface{}){
@@ -38,9 +35,3 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, name string, data in
 }
 
 
-func LastRenderTemplate(w http.ResponseWriter, r *http.Request, name string, data interface{}){
-	err := templates.ExecuteTemplate(w, name, data)
-	if err != nil {
-		http.Error( w, "Page not found!", http.StatusInternalServerError, )
-	}
-}
