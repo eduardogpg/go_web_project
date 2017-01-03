@@ -1,4 +1,4 @@
-package template
+package utils
 
 import(
 	"html/template"
@@ -13,8 +13,8 @@ var layoutFuncs = template.FuncMap{
 	},
 }
 
-var layout = template.Must( template.New("layout.html").Funcs(layoutFuncs).ParseFiles("templates/layout.html"), )
-var templates = template.Must(template.New("t").ParseGlob("./templates/**/*.html"))
+var layout = template.Must( template.New("layout.html").Funcs(layoutFuncs).ParseFiles("views/templates/layout.html"), )
+var templates = template.Must(template.New("t").ParseGlob("./views/templates/**/*.html"))
 
 func RenderTemplate(w http.ResponseWriter, r *http.Request, name string, data interface{}){
 	funcs := template.FuncMap{

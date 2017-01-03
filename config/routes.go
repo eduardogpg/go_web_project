@@ -1,4 +1,4 @@
-package utils
+package config
 
 import(
     "github.com/gorilla/mux"
@@ -8,7 +8,9 @@ import(
 
 func Routes()(http.Handler){
    mux := mux.NewRouter()
+   
    mux.HandleFunc("/", controllers.Index).Methods("GET")
+   mux.HandleFunc("/register", controllers.New).Methods("GET")
 
    return mux
 }

@@ -4,7 +4,7 @@ import(
 	"net/http"
 	"log"
 	"fmt"
-	"./utils"
+	"./config"
 )
 
 const port = ":3000"
@@ -14,7 +14,7 @@ func init(){
 }
 
 func main() {
-	mux := utils.Routes()
+	mux := config.Routes()
 	fmt.Println("Server ready.")
 	log.Fatal(http.ListenAndServe(port, mux))
 }
