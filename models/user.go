@@ -2,7 +2,7 @@ package models
 
 import(
 	"errors"
-	//"golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt" //go get golang.org/x/crypto/bcrypt
 )
 
 type User struct{
@@ -19,12 +19,28 @@ var(
 	errorPassword = ValidateError(errors.New("You must supply a password"))
 )
 
-func (this *User) setPassword() {
-    this.EncryptedPassword = "Eduardo"
+func (this *User) SetPassword(text string){
+    hashedPassword, err := bcrypt.GenerateFromPassword(toByte(text), bcrypt.DefaultCost)
+    if err != nil {
+        panic(err)
+    }
+    this.EncryptedPassword = string(hashedPassword)
+}
+
+func (this *User) CheckPassword(text string) bool {
+	err := bcrypt.CompareHashAndPassword(toByte(this.EncryptedPassword), toByte(text))
+	return err != nil
+}
+
+func toByte(text string)[]byte{
+	return []byte(text)
 }
 
 func NewUser(username, email, password string) (User, ValidateError){
-	user := User{ username, email, password }
+	user := User{ 	Username:username,
+					Email:email, 
+				}
+
 	if username == ""{
 		return user, errorUsername
 	}
@@ -36,6 +52,7 @@ func NewUser(username, email, password string) (User, ValidateError){
 	if password == ""{
 		return user, errorPassword
 	}
-	user.setPassword()
+
+	user.SetPassword(password)
 	return user, nil
 }
