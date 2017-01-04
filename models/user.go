@@ -23,7 +23,7 @@ func (this *User) SetPassword(text string){
 
 func (this *User) CheckPassword(text string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(this.EncryptedPassword), []byte(text))
-	return err != nil
+	return err == nil
 }
 
 func (this *User) ResetPassword(){
@@ -35,20 +35,24 @@ func (this *User) Save()bool{
 	return this.Id > 0
 }
 
-func Find(id int) User{
-	user := User{}
+func(this *User) Delete(){
+  connection.Delete(&this)
+}
+
+func (this *User) GetPassword()string{
+	return this.EncryptedPassword
+}
+
+func FindUser(id int) *User{ //Refactor aqui!
+	user := &User{}
   	connection.Where("id = ?", id).First(&user)
   	return user
 }
 
-func FindBy(field, value string) User{
-	user := User{}
+func FindUserBy(field, value string) *User{
+	user := &User{}
   	connection.Where(field +" = ?", value).First(&user)
   	return user
-}
-
-func(this *User) Delete(){
-  connection.Delete(&this)
 }
 
 func NewUser(username, password, email string) (User, ValidateError){
@@ -70,3 +74,4 @@ func CreateUser(username, password, email string) (User, ValidateError){
 	}
 	return user, err
 }
+

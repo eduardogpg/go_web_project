@@ -25,9 +25,9 @@ func HandlerUserCreate(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	
-	if user.Save(){
-		utils.AddCookie()
-	}
+	user.Save()
+	session := utils.NewSession(w)
+	session.UserId = user.Id
 	
 	utils.RenderTemplate(w, r, "index/home", map[string] interface{}{
 		"User" : user,

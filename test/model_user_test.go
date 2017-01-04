@@ -22,98 +22,107 @@ func TestMain(m *testing.M) {
 
 func setup(){
 	models.InitializeDataBase()
+	models.CreateTables()
 }
 
 func teardown(){
-	models.DeleteRecords()//Debemos de eliminar la tabla, no eliminar los registros en la base de datos!
+	models.DropDataTables()
 	models.CloseConnection()
+}
+
+func createUser(){
+
+}
+
+func TestNewUserWithoutEmail(t *testing.T) {
+	_, err := models.NewUser(username, password, "")
+	if err.Error() != "El email es requerido." {
+		t.Error("Validación incorrecta <Email>.", err)
+	}
+}
+
+func TestNewUserWithoutPassword(t *testing.T) {
+	_, err := models.NewUser(username, "", email)
+	if err.Error() != "El password es requerido." {
+		t.Error("Validación incorrecta <Password>.", err)
+	}
+}
+
+func TestNewUserWithoutUsername(t *testing.T) {
+	_, err := models.NewUser("", password, email)
+	if err.Error() != "El username es requerido." {
+		t.Error("Validación incorrecta <Username>.", err)
+	}
 }
 
 func TestNewUser(t *testing.T) {
 	_, err := models.NewUser(username, password, email)
 	if err != nil {
-		t.Error("No es posible crear el usuario.", err)
+		t.Error("No es posible crear un nuevo usuario.", err)
 	}
 }
 
-func TestNewUserBadRequest(t *testing.T) {
-	_, err := models.NewUser("", "", "")
-	if err == nil {
-		t.Error("El usuario si ha creado de forma correcta.", err)
-	}
-}
-
-func TestEncryptedPassword(t *testing.T) {
+func TestValidatePassword(t *testing.T) {
 	user, _ := models.NewUser(username, password, email)
-	if user.EncryptedPassword == password || len(user.EncryptedPassword) != 60{
-		t.Error("El password no esta encriptado!", nil)
+	if user.GetPassword() == password {
+		t.Error("No es posible generar el password del usuario.", nil)
 	}
 }
 
 func TestCheckPassword(t *testing.T) {
-	//Tenemos que realizar un refactor! D: que pasa
 	user, _ := models.NewUser(username, password, email)
-	if user.CheckPassword(password) {
-		t.Error("El password es el mismo.", nil)
+	if !user.CheckPassword(password) {
+		t.Error("No es posible validar el password.", nil)
 	}
 }
 
 func TestSaveUser(t *testing.T) {
 	user, _ := models.NewUser(username, password, email)
-	user.Save()
-	if user.Id == 0 {
-		t.Error("No es posible crear el registro.", nil)
+	if !user.Save() { 
+		t.Error("No es posible almacenar el registro en la base de datos.", nil)
+	}
+}
+
+func TestCreateUser(t *testing.T) {
+	_, err := models.CreateUser(username, password, email)
+	if err != nil { 
+		t.Error("No es posible crear el registro en la base de datos.", nil)
 	}
 }
 
 func TestFindUser(t *testing.T) {
-	user, _ := models.NewUser(username, password, email)
-	user.Save()
+	models.CreateUser(username, password, email)
+	user := models.FindUser(1)
 
-	user = models.Find(user.Id)
-	if user.Id != 1 && user.Username != username {
+	if user.Username != username { 
 		t.Error("No es posible encontrar el registro.", nil)
 	}
 }
 
-func TestFindByEmail(t *testing.T) {
-	user, _ := models.NewUser(username, password, email)
-	user.Save()
+func TestFindUserByEmail(t *testing.T) {
+	models.CreateUser(username, password, email)
+	user := models.FindUserBy("email", email)
 
-	user = models.FindBy("email", email)
-	if user.Email != email {
-		t.Error("No es posible encontrar el registro.", nil)
+	if user.Email != email { 
+		t.Error("No es posible encontrar el registro por Email.", nil)
 	}
 }
 
-func TestDeleteUser(t *testing.T) {
-	user, _ := models.NewUser(username, password, email)
-	user.Save()
-	id := user.Id
-
+func TestDeleteUser(t *testing.T){
+	user, _ := models.CreateUser(username, password, email)
 	user.Delete()
-
-	newUser := models.Find(id)
-	if newUser.Id > 0 {
-		t.Error("No es posible eliminar el registro.", nil)
-	}
 }
 
-func CreateUser(t *testing.T) {
-	user, _ := models.CreateUser(username, password, email)
-	if user.Id == 0{
-		t.Error("No es posible crear el registro.", nil)
-	}
-}
-
-func UpdateUser(t *testing.T) {
-	user, _ := models.CreateUser(username, password, email)
-	user.Email = NewEmail
+func UpdateUsername(t *testing.T){
+	models.CreateUser(username, password, email)
+	user := models.FindUser(1)
+	user.Username = "Eduardo Ismael"
 	user.Save()
 
-	user = models.Find(user.Id)
-	if user.Email == email{
+	if user.Username == username{
 		t.Error("No es posible actualizar el registro.", nil)
 	}
 }
+
+
 

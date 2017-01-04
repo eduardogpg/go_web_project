@@ -11,7 +11,7 @@ var(
 	errorLenPassword = ValidateError(errors.New("Error en la logitud del password."))
 )
 
-func UserValidate(username, email, password string) ValidateError {
+func UserValidate(username, password, email string) ValidateError {
 	if username == ""{
 		return errorUsername
 	}

@@ -6,6 +6,14 @@ import(
    	"log"
 )
 
+type Model interface {
+    Save() bool
+    Find(id int) interface{}
+    FindBy(field, value string) interface{}
+    Delete()
+}
+
+
 var connection *gorm.DB
 
 var engine_sql string = "mysql"
@@ -38,6 +46,16 @@ func DeleteRecords(){
 	connection.Where("id > ?", "0").Delete(User{})
 }
 
+func AutoMigrate(){
+  connection.AutoMigrate(&User{})
+}
 
+func CreateTables(){
+  connection.CreateTable(&User{})
+}
+
+func DropDataTables(){
+  connection.DropTable(&User{})
+}
 
 
