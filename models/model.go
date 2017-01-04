@@ -23,6 +23,7 @@ var database string = "go_web_project"
 
 func InitializeDataBase(){
 	connection = ConnectORM( GetConnectionString() )
+  CreateTables()
 }
 
 func ConnectORM(stringConnection string) *gorm.DB {
@@ -42,8 +43,8 @@ func GetConnectionString() string{
   return username + ":" + password + "@/" + database
 }
 
-func DeleteRecords(){
-	connection.Where("id > ?", "0").Delete(User{})
+func DeleteRecords(model interface{}){
+	connection.Where("id > ?", "0").Delete(model)
 }
 
 func AutoMigrate(){
@@ -51,7 +52,10 @@ func AutoMigrate(){
 }
 
 func CreateTables(){
-  connection.CreateTable(&User{})
+  if !connection.HasTable(&User{}){
+    connection.CreateTable(&User{})  
+  }
+  
 }
 
 func DropDataTables(){

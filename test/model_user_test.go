@@ -113,7 +113,7 @@ func TestDeleteUser(t *testing.T){
 	user.Delete()
 }
 
-func UpdateUsername(t *testing.T){
+func TestUpdateUsername(t *testing.T){
 	models.CreateUser(username, password, email)
 	user := models.FindUser(1)
 	user.Username = "Eduardo Ismael"
@@ -123,6 +123,3 @@ func UpdateUsername(t *testing.T){
 		t.Error("No es posible actualizar el registro.", nil)
 	}
 }
-
-
-

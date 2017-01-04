@@ -9,6 +9,7 @@ var(
 	errorEmail = ValidateError(errors.New("El email es requerido."))
 	errorPassword = ValidateError(errors.New("El password es requerido."))
 	errorLenPassword = ValidateError(errors.New("Error en la logitud del password."))
+	errorLogin = ValidateError(errors.New("Usuario o contraseña invalidos"))
 )
 
 func UserValidate(username, password, email string) ValidateError {
