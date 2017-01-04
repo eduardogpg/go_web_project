@@ -12,13 +12,12 @@ func HandlerUserNew(w http.ResponseWriter, r *http.Request){
 }
 
 func HandlerUserCreate(w http.ResponseWriter, r *http.Request){
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	email := r.FormValue("email")
+	user, err := models.NewUser(r.FormValue("username"), r.FormValue("password"), r.FormValue("email"))
 	
-	user, err := models.NewUser(username, password, email)
-
 	if err != nil{
+		log.Println(user)
+		user.ResetPassword()
+		
 		utils.RenderTemplate(w, r, "user/register", map[string] interface{}{
 			"Error" : err.Error(),
 			"User" : user,
@@ -26,6 +25,11 @@ func HandlerUserCreate(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	
-	log.Println("Tambien se va a ejecutar esto D: ")
-	utils.RenderTemplate(w, r, "user/register", nil)
+	if user.Save(){
+		utils.AddCookie()
+	}
+	
+	utils.RenderTemplate(w, r, "index/home", map[string] interface{}{
+		"User" : user,
+	})
 }

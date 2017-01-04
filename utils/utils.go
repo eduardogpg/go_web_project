@@ -44,7 +44,7 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, name string, data in
 			return template.HTML(buf.String()) , err
 		},
 	}
-
+	
 	var NewLayout = template.Must( template.New("layout.html").Funcs(funcs).ParseFiles("views/templates/layout.html"), )
 	err := NewLayout.Execute(w, data)
 	if err != nil{

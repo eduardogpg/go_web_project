@@ -26,9 +26,13 @@ func (this *User) CheckPassword(text string) bool {
 	return err != nil
 }
 
-func (this *User) Save() bool{
+func (this *User) ResetPassword(){
+	this.EncryptedPassword = ""
+}
+
+func (this *User) Save()bool{
 	connection.Create(&this)
-  	return true
+	return this.Id > 0
 }
 
 func Find(id int) User{
