@@ -11,8 +11,8 @@ func Routes()(http.Handler){
    
    mux.HandleFunc("/", controllers.Index).Methods("GET")
    
-   mux.HandleFunc("/register", controllers.NewUser).Methods("GET")
-   mux.HandleFunc("/register", controllers.CreateUser).Methods("POST")
+   mux.HandleFunc("/register", controllers.HandlerUserNew).Methods("GET")
+   mux.HandleFunc("/register", controllers.HandlerUserCreate).Methods("POST")
 
    return mux
 }

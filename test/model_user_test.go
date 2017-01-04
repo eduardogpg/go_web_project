@@ -25,7 +25,7 @@ func setup(){
 }
 
 func teardown(){
-	models.DeleteRecords()
+	models.DeleteRecords()//Debemos de eliminar la tabla, no eliminar los registros en la base de datos!
 	models.CloseConnection()
 }
 
